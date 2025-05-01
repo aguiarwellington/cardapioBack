@@ -1,37 +1,36 @@
 package com.example.cardapio.controller;
 
-//falar que é uma controller.é um controller da aplicacao
-
-import com.example.cardapio.food.Food;
-import com.example.cardapio.food.FoodRepository;
-import com.example.cardapio.food.FoodRequestDTO;
-import com.example.cardapio.food.FoodResponseDTO;
+import com.example.cardapio.food.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-//endpoint
 @RequestMapping("food")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FoodController {
-    @Autowired
-    private FoodRepository repository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @Autowired
+    private FoodService service;
+
     @PostMapping
-    public void saveFood(@RequestBody FoodRequestDTO data){
-        Food foodData = new Food(data);
-        repository.save(foodData);
-        return;
+    public void saveFood(@RequestBody FoodRequestDTO data) {
+        service.save(data);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
-    public List<FoodResponseDTO> getAll(){
+    public List<FoodResponseDTO> getAll() {
+        return service.listAll();
+    }
 
-        List<FoodResponseDTO> foodList = repository.findAll().stream().map(FoodResponseDTO::new).toList();
-        return foodList;
-}
+    @PutMapping("/{id}")
+    public FoodResponseDTO update(@PathVariable Long id, @RequestBody FoodRequestDTO data) {
+        return service.update(id, data);
+    }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 }

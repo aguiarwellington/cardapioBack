@@ -1,42 +1,27 @@
 package com.example.cardapio.food;
 
-//representando um entidade do banco
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-
-@Table(name="foods")
-@Entity(name="foods")
-
-//lomboke criar os gett, noargs...
-@Getter
+@Table(name = "foods")
+@Entity(name = "foods")
+@Data // já inclui @Getter, @Setter, @ToString, @EqualsAndHashCode, etc.
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-
 public class Food {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
-
     private String image;
-
     private Integer price;
 
-    //constructor
-    public Food(FoodRequestDTO data){
+    public Food(FoodRequestDTO data) {
+        this.title = data.title();
         this.image = data.image();
         this.price = data.price();
-        this.title = data.title();
     }
-
 }
